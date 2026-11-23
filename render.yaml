@@ -1,0 +1,27 @@
+# Render Blueprint for the backend (free tier). The frontend is deployed separately on Vercel.
+# Secrets are declared with `sync: false`, so Render asks for them in the dashboard
+# and they are never stored in this repository.
+services:
+  - type: web
+    name: ajaia-docs-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL # libsql://<db-name>-<org>.turso.io
+        sync: false
+      - key: DATABASE_AUTH_TOKEN
+        sync: false
+      - key: JWT_SECRET # 32+ random characters
+        sync: false
+      - key: CLIENT_ORIGIN # exact Vercel origin, e.g. https://ajaia-docs.vercel.app (no trailing slash)
+        sync: false
+      - key: DEMO_PASSWORD # password for the seeded alice@/bob@demo.com accounts
+        sync: false
